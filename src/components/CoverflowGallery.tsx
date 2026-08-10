@@ -19,7 +19,7 @@ const PHOTOS = [
 export type CoverflowGalleryProps = {
   /** Height of a card at full (centre) scale, in px. Omit to size it from the viewport. */
   cardHeight?: number;
-  /** Card width as a fraction of its height. */
+  /** Card width as a fraction of its height (portrait &lt; 1). */
   cardAspect?: number;
   /** Gap between resting (flattened) cards, as a fraction of card height. */
   gapRatio?: number;
@@ -37,25 +37,22 @@ export type CoverflowGalleryProps = {
   minScale?: number;
   /** Opacity once fully away from centre (centre is always 1). */
   minOpacity?: number;
-  /** How many card-widths from centre it takes to reach the min scale/max rotation. Smaller = snappier falloff. */
+  /** How many card-widths from centre it takes to reach the min scale/max rotation. Larger = more cards stay legible before fading. */
   falloffCards?: number;
-  /** Width of the visible window, as a multiple of card height. Smaller crops the outer cards more. */
-  visibleWidthRatio?: number;
 };
 
 export default function CoverflowGallery({
   cardHeight,
   cardAspect = 0.72,
-  gapRatio = 0.1,
+  gapRatio = 0.12,
   speed = 0.18,
   direction = "left",
-  rotation = 45,
-  depthZ = 0.9,
+  rotation = 32,
+  depthZ = 0.6,
   maxScale = 1,
-  minScale = 0.72,
-  minOpacity = 0.85,
-  falloffCards = 1.15,
-  visibleWidthRatio = 3.2,
+  minScale = 0.82,
+  minOpacity = 0.9,
+  falloffCards = 1.8,
 }: CoverflowGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -119,37 +116,35 @@ export default function CoverflowGallery({
   }, [cardAspect, gapRatio, speed, direction, rotation, depthZ, maxScale, minScale, minOpacity, falloffCards]);
 
   return (
-    <div className="mx-auto w-full overflow-hidden" style={{ maxWidth: `calc(${heightVar} * ${visibleWidthRatio})` }}>
-      <div
-        ref={containerRef}
-        className="relative mx-auto w-full"
-        style={{ height: heightVar, perspective: "1400px" }}
-      >
-        <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
-          {PHOTOS.map((src, i) => (
-            <div
-              key={src}
-              ref={(el) => {
-                cardRefs.current[i] = el;
-              }}
-              className="absolute left-1/2 top-0 -translate-x-1/2 overflow-hidden bg-bg-soft shadow-2xl shadow-black/60"
-              style={{
-                height: "100%",
-                width: `calc(100% * ${cardAspect})`,
-                borderRadius: "calc(100% * 0.06)",
-              }}
-            >
-              <Image
-                src={src}
-                alt=""
-                fill
-                sizes="(max-width: 640px) 200px, 400px"
-                loading="eager"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
+    <div
+      ref={containerRef}
+      className="relative w-full overflow-hidden"
+      style={{ height: heightVar, perspective: "1400px", ["--card-h" as string]: heightVar }}
+    >
+      <div className="relative mx-auto h-full w-full" style={{ transformStyle: "preserve-3d" }}>
+        {PHOTOS.map((src, i) => (
+          <div
+            key={src}
+            ref={(el) => {
+              cardRefs.current[i] = el;
+            }}
+            className="absolute left-1/2 top-0 -translate-x-1/2 overflow-hidden bg-bg-soft shadow-2xl shadow-black/60"
+            style={{
+              height: "var(--card-h)",
+              width: `calc(var(--card-h) * ${cardAspect})`,
+              borderRadius: "calc(var(--card-h) * 0.0316)",
+            }}
+          >
+            <Image
+              src={src}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 200px, 400px"
+              loading="eager"
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

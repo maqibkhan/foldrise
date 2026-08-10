@@ -16,21 +16,19 @@ type GalleryState = {
   minScale: number;
   minOpacity: number;
   falloffCards: number;
-  visibleWidthRatio: number;
 };
 
 const DEFAULTS: GalleryState = {
   cardAspect: 0.72,
-  gapRatio: 0.1,
+  gapRatio: 0.12,
   speed: 0.18,
   direction: "left",
-  rotation: 45,
-  depthZ: 0.9,
+  rotation: 32,
+  depthZ: 0.6,
   maxScale: 1,
-  minScale: 0.72,
-  minOpacity: 0.85,
-  falloffCards: 1.15,
-  visibleWidthRatio: 3.2,
+  minScale: 0.82,
+  minOpacity: 0.9,
+  falloffCards: 1.8,
 };
 
 /**
@@ -79,7 +77,6 @@ function GalleryControls({
           <Section title="Shape" />
           <Slider id={`${id}-aspect`} label="Card aspect (w/h)" value={value.cardAspect} min={0.4} max={1.2} step={0.02} onChange={(v) => set("cardAspect", v)} />
           <Slider id={`${id}-gap`} label="Gap between cards" value={value.gapRatio} min={0} max={0.5} step={0.02} onChange={(v) => set("gapRatio", v)} />
-          <Slider id={`${id}-visible`} label="Visible width ratio" value={value.visibleWidthRatio} min={1.5} max={6} step={0.1} onChange={(v) => set("visibleWidthRatio", v)} />
 
           <Section title="Motion" />
           <Slider id={`${id}-speed`} label="Speed" value={value.speed} min={0.02} max={0.8} step={0.02} unit=" card-w/s" onChange={(v) => set("speed", v)} />
