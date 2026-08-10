@@ -1,5 +1,5 @@
-import CoverflowPlayground from "@/components/CoverflowPlayground";
 import SiteHeader from "@/components/SiteHeader";
+import SimpleTickerPlayground from "@/components/SimpleTickerPlayground";
 import WaitlistForm from "@/components/WaitlistForm";
 
 export default function Home() {
@@ -42,8 +42,8 @@ export default function Home() {
         <div className="mt-auto pt-[5vh] pb-[1.75vh]">
           {/* In dev this also renders a floating panel (bottom-right) with a
               live control for every prop below. It's stripped from production
-              builds, so visitors only ever see the gallery itself. */}
-          <CoverflowPlayground />
+              builds, so visitors only ever see the ticker itself. */}
+          <SimpleTickerPlayground />
         </div>
       </main>
     </div>

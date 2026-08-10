@@ -1,63 +1,61 @@
 "use client";
 
 import { useId, useState } from "react";
-import CoverflowGallery from "@/components/CoverflowGallery";
+import SimpleTicker from "@/components/SimpleTicker";
 
 type Direction = "left" | "right";
 
-type GalleryState = {
+type TickerState = {
   cardAspect: number;
   gapRatio: number;
   speed: number;
   direction: Direction;
-  rotation: number;
-  depthZ: number;
-  maxScale: number;
-  minScale: number;
-  minOpacity: number;
-  falloffCards: number;
+  pauseOnHover: boolean;
+  fadeEdges: boolean;
+  fadeWidth: number;
+  grayscaleUntilHover: boolean;
+  liftOnHover: boolean;
 };
 
-const DEFAULTS: GalleryState = {
+const DEFAULTS: TickerState = {
   cardAspect: 0.72,
-  gapRatio: 0.12,
-  speed: 0.18,
+  gapRatio: 0.08,
+  speed: 45,
   direction: "left",
-  rotation: 32,
-  depthZ: 0.6,
-  maxScale: 1,
-  minScale: 0.82,
-  minOpacity: 0.9,
-  falloffCards: 1.8,
+  pauseOnHover: true,
+  fadeEdges: true,
+  fadeWidth: 160,
+  grayscaleUntilHover: false,
+  liftOnHover: true,
 };
 
 /**
- * Wraps CoverflowGallery with a floating on-screen panel for live-tuning every
+ * Wraps SimpleTicker with a floating on-screen panel for live-tuning every
  * prop. The panel only ever renders in development — production visitors
- * just get the gallery with whatever values you left it on.
+ * just get the ticker with whatever values you left it on.
  */
-export default function CoverflowPlayground() {
-  const [state, setState] = useState<GalleryState>(DEFAULTS);
+export default function SimpleTickerPlayground() {
+  const [state, setState] = useState<TickerState>(DEFAULTS);
 
   return (
     <>
-      <CoverflowGallery {...state} />
-      {process.env.NODE_ENV === "development" && <GalleryControls value={state} onChange={setState} />}
+      <SimpleTicker {...state} />
+      {process.env.NODE_ENV === "development" && <TickerControls value={state} onChange={setState} />}
     </>
   );
 }
 
-function GalleryControls({
+function TickerControls({
   value,
   onChange,
 }: {
-  value: GalleryState;
-  onChange: (next: GalleryState) => void;
+  value: TickerState;
+  onChange: (next: TickerState) => void;
 }) {
   const [open, setOpen] = useState(true);
   const id = useId();
 
-  function set<K extends keyof GalleryState>(key: K, val: GalleryState[K]) {
+  function set<K extends keyof TickerState>(key: K, val: TickerState[K]) {
     onChange({ ...value, [key]: val });
   }
 
@@ -68,7 +66,7 @@ function GalleryControls({
         onClick={() => setOpen((o) => !o)}
         className="sticky top-0 flex w-full items-center justify-between bg-black/85 px-4 py-3 text-xs font-semibold uppercase tracking-wide backdrop-blur-md"
       >
-        <span>Coverflow controls (dev only)</span>
+        <span>Ticker controls (dev only)</span>
         <span className="text-white/50">{open ? "−" : "+"}</span>
       </button>
 
@@ -76,10 +74,10 @@ function GalleryControls({
         <div className="flex flex-col gap-4 border-t border-white/10 px-4 py-4 text-sm">
           <Section title="Shape" />
           <Slider id={`${id}-aspect`} label="Card aspect (w/h)" value={value.cardAspect} min={0.4} max={1.2} step={0.02} onChange={(v) => set("cardAspect", v)} />
-          <Slider id={`${id}-gap`} label="Gap between cards" value={value.gapRatio} min={0} max={0.5} step={0.02} onChange={(v) => set("gapRatio", v)} />
+          <Slider id={`${id}-gap`} label="Gap between cards" value={value.gapRatio} min={0} max={0.4} step={0.01} onChange={(v) => set("gapRatio", v)} />
 
           <Section title="Motion" />
-          <Slider id={`${id}-speed`} label="Speed" value={value.speed} min={0.02} max={0.8} step={0.02} unit=" card-w/s" onChange={(v) => set("speed", v)} />
+          <Slider id={`${id}-speed`} label="Speed" value={value.speed} min={10} max={120} step={5} unit="s / loop" onChange={(v) => set("speed", v)} />
           <div className="flex flex-col gap-1">
             <span className="text-xs text-white/60">Direction</span>
             <div className="flex gap-2">
@@ -99,14 +97,13 @@ function GalleryControls({
               ))}
             </div>
           </div>
+          <Toggle label="Pause on hover" checked={value.pauseOnHover} onChange={(v) => set("pauseOnHover", v)} />
 
-          <Section title="Depth (applied by distance from centre)" />
-          <Slider id={`${id}-rotation`} label="Max rotation" value={value.rotation} min={0} max={75} step={1} unit="°" onChange={(v) => set("rotation", v)} />
-          <Slider id={`${id}-depth`} label="Max recession (Z)" value={value.depthZ} min={0} max={2} step={0.05} onChange={(v) => set("depthZ", v)} />
-          <Slider id={`${id}-max-scale`} label="Centre scale" value={value.maxScale} min={0.8} max={1.4} step={0.02} onChange={(v) => set("maxScale", v)} />
-          <Slider id={`${id}-min-scale`} label="Min scale" value={value.minScale} min={0.3} max={1} step={0.02} onChange={(v) => set("minScale", v)} />
-          <Slider id={`${id}-min-opacity`} label="Min opacity" value={value.minOpacity} min={0.2} max={1} step={0.02} onChange={(v) => set("minOpacity", v)} />
-          <Slider id={`${id}-falloff`} label="Falloff distance" value={value.falloffCards} min={0.5} max={3} step={0.05} unit=" card-w" onChange={(v) => set("falloffCards", v)} />
+          <Section title="Look" />
+          <Toggle label="Fade edges" checked={value.fadeEdges} onChange={(v) => set("fadeEdges", v)} />
+          <Slider id={`${id}-fade-width`} label="Fade width" value={value.fadeWidth} min={0} max={300} step={10} unit="px" onChange={(v) => set("fadeWidth", v)} />
+          <Toggle label="Grayscale until hover" checked={value.grayscaleUntilHover} onChange={(v) => set("grayscaleUntilHover", v)} />
+          <Toggle label="Lift on hover" checked={value.liftOnHover} onChange={(v) => set("liftOnHover", v)} />
 
           <button
             type="button"
@@ -162,6 +159,28 @@ function Slider({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="accent-white"
+      />
+    </label>
+  );
+}
+
+function Toggle({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <label className="flex cursor-pointer items-center justify-between text-xs text-white/80">
+      <span>{label}</span>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-4 w-4 accent-white"
       />
     </label>
   );
