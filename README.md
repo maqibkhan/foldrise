@@ -1,6 +1,8 @@
 # Foldrise — Coming Soon
 
-One-section coming-soon landing page for Foldrise, built with Next.js, TypeScript, and Tailwind CSS. Collects launch signups into Supabase.
+One-section waitlist landing page for Foldrise, built with Next.js, TypeScript, and Tailwind CSS. Collects launch signups into Supabase.
+
+The page is a direct implementation of the `Launch Web` frame in the **Foldrise AI** Figma file. Design tokens (both the `Base colors` and `Tokens` variable collections) and the file's text styles are mirrored as CSS custom properties in [`src/app/globals.css`](src/app/globals.css), so colour and type changes in Figma map onto named variables here.
 
 ## Setup
 
@@ -40,9 +42,13 @@ One-section coming-soon landing page for Foldrise, built with Next.js, TypeScrip
 
 ## Project structure
 
-- `src/app/page.tsx` — the coming-soon page
-- `src/components/EmailSignupForm.tsx` — signup form with validation, loading, error, and success states
-- `src/components/PortraitCarousel.tsx` — the 3D portrait carousel (placeholder gradient cards — swap in real images later)
+- `src/app/page.tsx` — the waitlist page
+- `src/app/globals.css` — design tokens and text styles ported from Figma
+- `src/components/SiteHeader.tsx` — logo lockup and social links
+- `src/components/WaitlistForm.tsx` — signup form with validation, loading, error, and success states
+- `src/components/PhotoStrip.tsx` — the centred, overflowing strip of model photos
 - `src/app/api/subscribe/route.ts` — server route that writes to Supabase
 - `src/lib/supabase-admin.ts` — server-only Supabase client
 - `supabase/schema.sql` — table definition to run in Supabase
+- `public/images/` — model photos exported from Figma (WebP)
+- `public/icons/` — logo mark and social icons exported from Figma (SVG)

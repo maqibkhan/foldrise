@@ -1,18 +1,173 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Design tokens — mirrored 1:1 from the Figma file "Foldrise AI".
+   Collection: Base colors  →  --base-*
+   Collection: Tokens       →  --token-*
+   Text styles              →  --text-*
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  /* --- Base colors / Neutrals / Solid ---------------------------------- */
+  --base-neutral-50: #ebedf0;
+  --base-neutral-100: #8c8e91;
+  --base-neutral-150: #6f7073;
+  --base-neutral-200: #4f5052;
+  --base-neutral-300: #3e3f41;
+  --base-neutral-400: #343538;
+  --base-neutral-500: #2a2b2e;
+  --base-neutral-600: #242528;
+  --base-neutral-700: #212325;
+  --base-neutral-800: #16171a;
+  --base-neutral-900: #0f1113;
+
+  /* --- Base colors / Neutrals / Alpha / White --------------------------- */
+  --base-white-2: rgb(235 237 240 / 0.02);
+  --base-white-5: rgb(235 237 240 / 0.05);
+  --base-white-8: rgb(235 237 240 / 0.08);
+  --base-white-12: rgb(235 237 240 / 0.12);
+  --base-white-20: rgb(235 237 240 / 0.2);
+  --base-white-40: rgb(235 237 240 / 0.4);
+  --base-white-60: rgb(235 237 240 / 0.6);
+  --base-white-80: rgb(235 237 240 / 0.8);
+  --base-white-90: rgb(235 237 240 / 0.9);
+  --base-white-97: rgb(235 237 240 / 0.97);
+
+  /* --- Base colors / Neutrals / Alpha / Black --------------------------- */
+  --base-black-2: rgb(11 13 14 / 0.02);
+  --base-black-5: rgb(11 13 14 / 0.05);
+  --base-black-8: rgb(11 13 14 / 0.08);
+  --base-black-12: rgb(11 13 14 / 0.12);
+  --base-black-20: rgb(11 13 14 / 0.2);
+  --base-black-40: rgb(11 13 14 / 0.4);
+  --base-black-60: rgb(11 13 14 / 0.6);
+  --base-black-80: rgb(11 13 14 / 0.8);
+  --base-black-90: rgb(11 13 14 / 0.9);
+  --base-black-97: rgb(11 13 14 / 0.97);
+
+  /* --- Base colors / Extra --------------------------------------------- */
+  --base-pure-dark: var(--base-neutral-900);
+  --base-pure-light: #ffffff;
+
+  /* --- Tokens / Bg ------------------------------------------------------ */
+  --token-bg-dark: var(--base-neutral-900);
+  --token-bg-weak: var(--base-neutral-800);
+  --token-bg-soft: var(--base-neutral-700);
+  --token-bg-mid: var(--base-neutral-600);
+  --token-bg-light: var(--base-neutral-500);
+  --token-bg-white: var(--base-pure-light);
+  --token-bg-alpha-light-white: var(--base-white-8);
+  --token-bg-alpha-light-weak: var(--base-white-5);
+  --token-bg-alpha-light-soft: var(--base-white-2);
+  --token-bg-alpha-dark-dark: var(--base-black-8);
+  --token-bg-alpha-dark-weak: var(--base-black-5);
+  --token-bg-alpha-dark-soft: var(--base-black-2);
+
+  /* --- Tokens / Text ---------------------------------------------------- */
+  --token-text-strong: var(--base-white-97);
+  --token-text-sub: var(--base-neutral-100);
+  --token-text-soft: var(--base-neutral-150);
+  --token-text-disabled: var(--base-neutral-400);
+  --token-text-darker: var(--base-pure-dark);
+
+  /* --- Tokens / Icon ---------------------------------------------------- */
+  --token-icon-strong: var(--base-white-97);
+  --token-icon-sub: var(--base-neutral-100);
+  --token-icon-soft: var(--base-neutral-150);
+  --token-icon-disabled: var(--base-neutral-400);
+  --token-icon-darker: var(--base-pure-dark);
+
+  /* --- Tokens / Border -------------------------------------------------- */
+  --token-border-strong: var(--base-white-8);
+  --token-border-sub: var(--base-white-5);
+  --token-border-white: var(--base-white-97);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-dark: var(--token-bg-dark);
+  --color-bg-weak: var(--token-bg-weak);
+  --color-bg-soft: var(--token-bg-soft);
+  --color-bg-mid: var(--token-bg-mid);
+  --color-bg-light: var(--token-bg-light);
+  --color-bg-white: var(--token-bg-white);
+
+  --color-text-strong: var(--token-text-strong);
+  --color-text-sub: var(--token-text-sub);
+  --color-text-soft: var(--token-text-soft);
+  --color-text-disabled: var(--token-text-disabled);
+  --color-text-darker: var(--token-text-darker);
+
+  --color-border-strong: var(--token-border-strong);
+  --color-border-sub: var(--token-border-sub);
+
+  --font-sans: var(--font-inter);
+}
+
+/* ==========================================================================
+   Text styles — mirrored from the Figma text styles of the same name.
+   ========================================================================== */
+
+/* Title/H1 Title — Inter Display Medium 56/64, -1% tracking. */
+.text-title-h1 {
+  font-family: var(--font-inter), sans-serif;
+  font-variation-settings: "opsz" 32;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 64px;
+  letter-spacing: -0.01em;
+}
+
+/* The wordmark next to the logo — Inter Display Medium 15.22/90%, -2%. */
+.text-wordmark {
+  font-family: var(--font-inter), sans-serif;
+  font-variation-settings: "opsz" 32;
+  font-weight: 500;
+  font-size: 15.217px;
+  line-height: 90%;
+  letter-spacing: -0.02em;
+}
+
+.text-paragraph-md {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  letter-spacing: -0.011em;
+}
+
+.text-paragraph-sm {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+}
+
+.text-label-sm {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--token-bg-dark);
+  color: var(--token-text-strong);
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* The photo strip animates only when the visitor is happy to see motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

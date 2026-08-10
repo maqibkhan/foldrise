@@ -1,36 +1,48 @@
-import EmailSignupForm from "@/components/EmailSignupForm";
-import PortraitCarousel from "@/components/PortraitCarousel";
+import PhotoStrip from "@/components/PhotoStrip";
+import SiteHeader from "@/components/SiteHeader";
+import WaitlistForm from "@/components/WaitlistForm";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen w-full flex-1 flex-col items-center justify-center bg-white px-6 py-16">
-      <div className="flex w-full max-w-3xl flex-col items-center text-center">
-        <span className="rounded-full border border-blue-100 bg-blue-50 px-4 py-1.5 text-xs font-medium tracking-wide text-blue-600">
-          AI photo studio for clothing brands
-        </span>
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-bg-dark">
+      {/* Soft light leak behind the hero — in Figma a 322x798 block rotated 30°
+          and blurred by 140, centred at (459, 66) on the 1728-wide frame. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[26.5%] top-[66px] z-0 h-[798px] w-[322px] -translate-x-1/2 -translate-y-1/2 rotate-30 rounded-[50px] bg-bg-soft blur-[140px]"
+      />
 
-        <h1 className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
-          Create premium model photos
-          <br className="hidden sm:block" /> without a photoshoot
-        </h1>
+      <SiteHeader />
 
-        <p className="mt-6 max-w-xl text-balance text-base text-slate-500 sm:text-lg">
-          Turn garment photos into consistent model images for every product
-          and collection.
-        </p>
+      <main className="relative z-10 flex flex-1 flex-col">
+        <section className="flex flex-col items-center px-6 pt-14 text-center sm:pt-28 lg:pt-[194px]">
+          <div className="flex w-full max-w-[802px] flex-col items-center gap-4">
+            <div className="flex w-full flex-col items-center gap-8">
+              <div className="flex w-full flex-col items-center gap-5">
+                <h1 className="text-title-h1 max-w-[646px] text-[36px] leading-[1.1] text-text-strong sm:text-[44px] lg:text-[56px] lg:leading-[64px]">
+                  Join the waitlist!
+                </h1>
+                <p className="text-paragraph-md max-w-[492px] text-text-sub">
+                  Foldrise helps clothing brands create premium model photos without the cost and
+                  effort of a traditional photoshoot.
+                </p>
+              </div>
 
-        <div className="mt-10">
-          <EmailSignupForm />
+              <div className="w-full max-w-[400px]">
+                <WaitlistForm />
+              </div>
+            </div>
+
+            <p className="text-paragraph-sm text-text-soft">
+              We will only email you about the Foldrise launch.
+            </p>
+          </div>
+        </section>
+
+        <div className="mt-auto pt-14 pb-10 sm:pt-32 lg:pt-[228px] lg:pb-[56px]">
+          <PhotoStrip />
         </div>
-
-        <p className="mt-4 text-xs text-slate-400">
-          We will only email you about the launch.
-        </p>
-
-        <div className="mt-16 w-full sm:mt-20">
-          <PortraitCarousel />
-        </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
