@@ -4,7 +4,11 @@ import WaitlistForm from "@/components/WaitlistForm";
 
 export default function Home() {
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-bg-dark">
+    /* Everything is measured against the viewport height so the strip always
+       lands on screen the way it does in the Figma frame. The design's 1371px
+       frame is the reference: 194/1371 of it sits above the hero, the cards are
+       507/1371 tall, and 56/1371 is left below them. */
+    <div className="relative flex min-h-dvh flex-col overflow-hidden bg-bg-dark">
       {/* Soft light leak behind the hero — in Figma a 322x798 block rotated 30°
           and blurred by 140, centred at (459, 66) on the 1728-wide frame. */}
       <div
@@ -15,7 +19,7 @@ export default function Home() {
       <SiteHeader />
 
       <main className="relative z-10 flex flex-1 flex-col">
-        <section className="flex flex-col items-center px-6 pt-14 text-center sm:pt-28 lg:pt-[194px]">
+        <section className="flex flex-col items-center px-6 pt-10 text-center sm:pt-[8vh] lg:pt-[14.15vh]">
           <div className="flex w-full max-w-[802px] flex-col items-center gap-4">
             <div className="flex w-full flex-col items-center gap-8">
               <div className="flex w-full flex-col items-center gap-5">
@@ -39,7 +43,9 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="mt-auto pt-14 pb-10 sm:pt-32 lg:pt-[228px] lg:pb-[56px]">
+        {/* `mt-auto` opens the gap to the design's 228px whenever the window is
+            tall enough; the small padding is only the floor for short laptops. */}
+        <div className="mt-auto pt-[5vh] pb-[4.1vh]">
           <PhotoStrip />
         </div>
       </main>

@@ -30,18 +30,24 @@ const PRELOAD = new Set([3, 4, 5, 6, 7]);
 export default function PhotoStrip() {
   return (
     <div
-      className="flex w-full justify-center overflow-hidden [--card-h:184px] sm:[--card-h:300px] lg:[--card-h:420px] xl:[--card-h:507px]"
+      /* 507 of the design's 1371px frame is 37vh, so tying the card height to
+         the viewport keeps the strip in frame at any window height, exactly as
+         it sits in Figma. The bounds stop it collapsing on short laptops or
+         ballooning on very tall displays. */
+      className="flex w-full justify-center overflow-hidden [--card-h:clamp(200px,min(37vh,calc(100vh-600px)),560px)]"
       role="img"
       aria-label="Examples of AI-generated model photos produced with Foldrise"
     >
-      <div className="flex shrink-0 items-center gap-[10px] sm:gap-[14px] xl:gap-5">
+      <div className="flex shrink-0 items-center gap-[calc(var(--card-h)*0.0394)]">
         {PHOTOS.map((photo, i) => (
           <div
             key={photo.src}
-            className="relative shrink-0 overflow-hidden rounded-[10px] bg-bg-soft sm:rounded-xl xl:rounded-2xl"
+            className="relative shrink-0 overflow-hidden bg-bg-soft"
             style={{
               height: "var(--card-h)",
               width: `calc(var(--card-h) * ${photo.ratio})`,
+              /* 16px radius on a 507px card */
+              borderRadius: "calc(var(--card-h) * 0.0316)",
             }}
           >
             <Image
