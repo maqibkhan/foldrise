@@ -1,4 +1,4 @@
-import PhotoStrip from "@/components/PhotoStrip";
+import PhotoTicker from "@/components/PhotoTicker";
 import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
 
@@ -9,17 +9,10 @@ export default function Home() {
        frame is the reference: 194/1371 of it sits above the hero, the cards are
        507/1371 tall, and 56/1371 is left below them. */
     <div className="relative flex min-h-dvh flex-col overflow-hidden bg-bg-dark">
-      {/* Soft light leak behind the hero — in Figma a 322x798 block rotated 30°
-          and blurred by 140, centred at (459, 66) on the 1728-wide frame. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-[26.5%] top-[66px] z-0 h-[798px] w-[322px] -translate-x-1/2 -translate-y-1/2 rotate-30 rounded-[50px] bg-bg-soft blur-[140px]"
-      />
-
       <SiteHeader />
 
       <main className="relative z-10 flex flex-1 flex-col">
-        <section className="flex flex-col items-center px-6 pt-10 text-center sm:pt-[8vh] lg:pt-[14.15vh]">
+        <section className="flex flex-col items-center px-6 pt-10 text-center sm:pt-[8vh] lg:pt-[13.13vh]">
           <div className="flex w-full max-w-[802px] flex-col items-center gap-4">
             <div className="flex w-full flex-col items-center gap-8">
               <div className="flex w-full flex-col items-center gap-5">
@@ -46,7 +39,16 @@ export default function Home() {
         {/* `mt-auto` opens the gap to the design's 228px whenever the window is
             tall enough; the small padding is only the floor for short laptops. */}
         <div className="mt-auto pt-[5vh] pb-[4.1vh]">
-          <PhotoStrip />
+          {/* Every knob for the ticker lives right here — tune freely. */}
+          <PhotoTicker
+            speed={50}
+            direction="left"
+            pauseOnHover
+            fadeEdges
+            fadeWidth={160}
+            grayscaleUntilHover={false}
+            liftOnHover
+          />
         </div>
       </main>
     </div>
