@@ -1,5 +1,5 @@
-import PhotoTicker from "@/components/PhotoTicker";
 import SiteHeader from "@/components/SiteHeader";
+import TickerPlayground from "@/components/TickerPlayground";
 import WaitlistForm from "@/components/WaitlistForm";
 
 export default function Home() {
@@ -40,16 +40,10 @@ export default function Home() {
             tall enough; the small padding is only the floor for short laptops. */}
         {/* 24px at the 1371px reference height = 1.75vh. */}
         <div className="mt-auto pt-[5vh] pb-[1.75vh]">
-          {/* Every knob for the ticker lives right here — tune freely. */}
-          <PhotoTicker
-            speed={50}
-            direction="left"
-            pauseOnHover
-            fadeEdges
-            fadeWidth={160}
-            grayscaleUntilHover={false}
-            liftOnHover
-          />
+          {/* In dev this also renders a floating panel (bottom-right) with a
+              live control for every prop below. It's stripped from production
+              builds, so visitors only ever see the ticker itself. */}
+          <TickerPlayground />
         </div>
       </main>
     </div>
