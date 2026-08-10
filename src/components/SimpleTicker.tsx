@@ -36,8 +36,16 @@ export type SimpleTickerProps = {
   fadeWidth?: number;
   /** Desaturate every card except the one under the pointer. */
   grayscaleUntilHover?: boolean;
-  /** Lift and enlarge a card slightly when the pointer is over it. */
+  /** How grayscale the resting state is, 0-1. Only used when grayscaleUntilHover is true. */
+  grayscaleAmount?: number;
+  /** Lift and enlarge a card when the pointer is over it. */
   liftOnHover?: boolean;
+  /** Scale a card reaches on hover. Only used when liftOnHover is true. */
+  liftScale?: number;
+  /** How long the hover transition takes, in ms. */
+  hoverDuration?: number;
+  /** CSS easing function for the hover transition. */
+  hoverEasing?: string;
 };
 
 export default function SimpleTicker({
@@ -50,7 +58,11 @@ export default function SimpleTicker({
   fadeEdges = true,
   fadeWidth = 160,
   grayscaleUntilHover = false,
+  grayscaleAmount = 1,
   liftOnHover = true,
+  liftScale = 1.05,
+  hoverDuration = 300,
+  hoverEasing = "ease-out",
 }: SimpleTickerProps) {
   // Two copies of the strip sit back to back; animating the first one exactly
   // out of view (translateX(-50%)) hands off to the second seamlessly.
@@ -65,18 +77,25 @@ export default function SimpleTicker({
   return (
     <div
       className="group/ticker relative flex w-full overflow-hidden"
-      style={{
-        ["--card-h" as string]: heightVar,
-        ...(fadeMask ? { maskImage: fadeMask, WebkitMaskImage: fadeMask } : {}),
-      }}
+      style={
+        {
+          "--card-h": heightVar,
+          "--hover-scale": liftOnHover ? liftScale : 1,
+          "--hover-duration": `${hoverDuration}ms`,
+          "--hover-ease": hoverEasing,
+          "--ticker-grayscale": grayscaleUntilHover ? grayscaleAmount : 0,
+          ...(fadeMask ? { maskImage: fadeMask, WebkitMaskImage: fadeMask } : {}),
+        } as React.CSSProperties
+      }
       role="img"
       aria-label="Examples of AI-generated model photos produced with Foldrise"
     >
       <div
-        className={`flex w-max shrink-0 items-center gap-[calc(var(--card-h)*${gapRatio})] will-change-transform ${
+        className={`flex w-max shrink-0 items-center will-change-transform ${
           pauseOnHover ? "group-hover/ticker:[animation-play-state:paused]" : ""
         }`}
         style={{
+          gap: `calc(var(--card-h) * ${gapRatio})`,
           animationName: direction === "left" ? "ticker-left" : "ticker-right",
           animationDuration: `${speed}s`,
           animationTimingFunction: "linear",
@@ -89,7 +108,7 @@ export default function SimpleTicker({
           return (
             <div
               key={`${src}-${isFirstCopy ? "a" : "b"}`}
-              className="group/card relative shrink-0 overflow-hidden bg-bg-soft"
+              className="ticker-card relative shrink-0 overflow-hidden bg-bg-soft"
               style={{
                 height: "var(--card-h)",
                 width: `calc(var(--card-h) * ${cardAspect})`,
@@ -103,9 +122,7 @@ export default function SimpleTicker({
                 sizes="(max-width: 640px) 160px, 320px"
                 priority={priority}
                 loading={priority ? undefined : "eager"}
-                className={`object-cover transition-[filter,transform] duration-300 ease-out ${
-                  grayscaleUntilHover ? "grayscale group-hover/card:grayscale-0" : ""
-                } ${liftOnHover ? "group-hover/card:scale-105" : ""}`}
+                className="ticker-card-media object-cover"
               />
             </div>
           );

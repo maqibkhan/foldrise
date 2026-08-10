@@ -183,6 +183,22 @@ body {
   }
 }
 
+/* Ticker card hover: driven entirely by CSS custom properties set inline by
+   the component, so every value (scale, speed, easing, resting grayscale)
+   works at any runtime value — unlike a Tailwind arbitrary-value class, whose
+   CSS only exists for values literally present in the source text. */
+.ticker-card-media {
+  filter: grayscale(var(--ticker-grayscale, 0));
+  transition:
+    transform var(--hover-duration, 300ms) var(--hover-ease, ease-out),
+    filter var(--hover-duration, 300ms) var(--hover-ease, ease-out);
+}
+
+.ticker-card:hover .ticker-card-media {
+  transform: scale(var(--hover-scale, 1));
+  filter: grayscale(0);
+}
+
 /* The photo strip animates only when the visitor is happy to see motion. */
 @media (prefers-reduced-motion: reduce) {
   *,

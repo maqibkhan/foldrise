@@ -14,8 +14,14 @@ type TickerState = {
   fadeEdges: boolean;
   fadeWidth: number;
   grayscaleUntilHover: boolean;
+  grayscaleAmount: number;
   liftOnHover: boolean;
+  liftScale: number;
+  hoverDuration: number;
+  hoverEasing: string;
 };
+
+const EASING_OPTIONS = ["ease-out", "ease-in-out", "ease-in", "linear", "cubic-bezier(0.34, 1.56, 0.64, 1)"];
 
 const DEFAULTS: TickerState = {
   cardAspect: 0.72,
@@ -26,7 +32,11 @@ const DEFAULTS: TickerState = {
   fadeEdges: true,
   fadeWidth: 160,
   grayscaleUntilHover: false,
+  grayscaleAmount: 1,
   liftOnHover: true,
+  liftScale: 1.05,
+  hoverDuration: 300,
+  hoverEasing: "ease-out",
 };
 
 /**
@@ -102,8 +112,27 @@ function TickerControls({
           <Section title="Look" />
           <Toggle label="Fade edges" checked={value.fadeEdges} onChange={(v) => set("fadeEdges", v)} />
           <Slider id={`${id}-fade-width`} label="Fade width" value={value.fadeWidth} min={0} max={300} step={10} unit="px" onChange={(v) => set("fadeWidth", v)} />
-          <Toggle label="Grayscale until hover" checked={value.grayscaleUntilHover} onChange={(v) => set("grayscaleUntilHover", v)} />
+
+          <Section title="Hover animation" />
           <Toggle label="Lift on hover" checked={value.liftOnHover} onChange={(v) => set("liftOnHover", v)} />
+          <Slider id={`${id}-lift-scale`} label="Hover scale" value={value.liftScale} min={1} max={1.5} step={0.01} onChange={(v) => set("liftScale", v)} />
+          <Slider id={`${id}-hover-duration`} label="Hover speed" value={value.hoverDuration} min={50} max={1000} step={25} unit="ms" onChange={(v) => set("hoverDuration", v)} />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-white/60">Hover easing</span>
+            <select
+              value={value.hoverEasing}
+              onChange={(e) => set("hoverEasing", e.target.value)}
+              className="rounded-lg border border-white/20 bg-black/60 px-2 py-1.5 text-xs text-white"
+            >
+              {EASING_OPTIONS.map((ease) => (
+                <option key={ease} value={ease}>
+                  {ease}
+                </option>
+              ))}
+            </select>
+          </div>
+          <Toggle label="Grayscale until hover" checked={value.grayscaleUntilHover} onChange={(v) => set("grayscaleUntilHover", v)} />
+          <Slider id={`${id}-grayscale-amount`} label="Resting grayscale" value={value.grayscaleAmount} min={0} max={1} step={0.05} onChange={(v) => set("grayscaleAmount", v)} />
 
           <button
             type="button"
