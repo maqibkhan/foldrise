@@ -107,13 +107,15 @@
    Text styles — mirrored from the Figma text styles of the same name.
    ========================================================================== */
 
-/* Title/H1 Title — Inter Display Medium 56/64, -1% tracking. */
+/* Title/H1 Title — Inter Display Medium, -1% tracking. Figma's spec is 56/64,
+   but font-size and line-height are left to the caller: page.tsx sets them
+   responsively (32px on mobile up to 56px at the design width), and a fixed
+   value here would win the cascade over those Tailwind utilities and override
+   every breakpoint but the last one applied. */
 .text-title-h1 {
   font-family: var(--font-inter), sans-serif;
   font-variation-settings: "opsz" 32;
   font-weight: 500;
-  font-size: 56px;
-  line-height: 64px;
   letter-spacing: -0.01em;
 }
 
