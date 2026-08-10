@@ -3,34 +3,34 @@
 import { useId, useState } from "react";
 import CoverflowGallery from "@/components/CoverflowGallery";
 
+type Direction = "left" | "right";
+
 type GalleryState = {
   cardAspect: number;
-  spacingX: number;
-  depthZ: number;
+  gapRatio: number;
+  speed: number;
+  direction: Direction;
   rotation: number;
-  scaleFalloff: number;
-  opacityFalloff: number;
+  depthZ: number;
+  maxScale: number;
+  minScale: number;
+  minOpacity: number;
+  falloffCards: number;
   visibleWidthRatio: number;
-  cursorTilt: boolean;
-  cursorTiltStrength: number;
-  scrollTilt: boolean;
-  scrollTiltStrength: number;
-  smoothing: number;
 };
 
 const DEFAULTS: GalleryState = {
   cardAspect: 0.72,
-  spacingX: 0.62,
-  depthZ: 0.5,
-  rotation: 28,
-  scaleFalloff: 0.85,
-  opacityFalloff: 0.7,
-  visibleWidthRatio: 2.7,
-  cursorTilt: true,
-  cursorTiltStrength: 10,
-  scrollTilt: true,
-  scrollTiltStrength: 14,
-  smoothing: 0.07,
+  gapRatio: 0.1,
+  speed: 0.18,
+  direction: "left",
+  rotation: 45,
+  depthZ: 0.9,
+  maxScale: 1,
+  minScale: 0.72,
+  minOpacity: 0.85,
+  falloffCards: 1.15,
+  visibleWidthRatio: 3.2,
 };
 
 /**
@@ -78,21 +78,38 @@ function GalleryControls({
         <div className="flex flex-col gap-4 border-t border-white/10 px-4 py-4 text-sm">
           <Section title="Shape" />
           <Slider id={`${id}-aspect`} label="Card aspect (w/h)" value={value.cardAspect} min={0.4} max={1.2} step={0.02} onChange={(v) => set("cardAspect", v)} />
-          <Slider id={`${id}-visible`} label="Visible width ratio" value={value.visibleWidthRatio} min={1.5} max={5} step={0.1} onChange={(v) => set("visibleWidthRatio", v)} />
-
-          <Section title="Depth" />
-          <Slider id={`${id}-spacing`} label="Horizontal spacing" value={value.spacingX} min={0.2} max={1.2} step={0.02} onChange={(v) => set("spacingX", v)} />
-          <Slider id={`${id}-depth`} label="Depth (Z) per step" value={value.depthZ} min={0} max={1.2} step={0.02} onChange={(v) => set("depthZ", v)} />
-          <Slider id={`${id}-rotation`} label="Rotation per step" value={value.rotation} min={0} max={60} step={1} unit="°" onChange={(v) => set("rotation", v)} />
-          <Slider id={`${id}-scale`} label="Scale falloff" value={value.scaleFalloff} min={0.4} max={1} step={0.01} onChange={(v) => set("scaleFalloff", v)} />
-          <Slider id={`${id}-opacity`} label="Opacity falloff" value={value.opacityFalloff} min={0.2} max={1} step={0.02} onChange={(v) => set("opacityFalloff", v)} />
+          <Slider id={`${id}-gap`} label="Gap between cards" value={value.gapRatio} min={0} max={0.5} step={0.02} onChange={(v) => set("gapRatio", v)} />
+          <Slider id={`${id}-visible`} label="Visible width ratio" value={value.visibleWidthRatio} min={1.5} max={6} step={0.1} onChange={(v) => set("visibleWidthRatio", v)} />
 
           <Section title="Motion" />
-          <Toggle label="Cursor tilt" checked={value.cursorTilt} onChange={(v) => set("cursorTilt", v)} />
-          <Slider id={`${id}-cursor-strength`} label="Cursor tilt strength" value={value.cursorTiltStrength} min={0} max={30} step={1} unit="°" disabled={!value.cursorTilt} onChange={(v) => set("cursorTiltStrength", v)} />
-          <Toggle label="Scroll tilt" checked={value.scrollTilt} onChange={(v) => set("scrollTilt", v)} />
-          <Slider id={`${id}-scroll-strength`} label="Scroll tilt strength" value={value.scrollTiltStrength} min={0} max={40} step={2} unit="px" disabled={!value.scrollTilt} onChange={(v) => set("scrollTiltStrength", v)} />
-          <Slider id={`${id}-smoothing`} label="Smoothing" value={value.smoothing} min={0.02} max={0.3} step={0.01} onChange={(v) => set("smoothing", v)} />
+          <Slider id={`${id}-speed`} label="Speed" value={value.speed} min={0.02} max={0.8} step={0.02} unit=" card-w/s" onChange={(v) => set("speed", v)} />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-white/60">Direction</span>
+            <div className="flex gap-2">
+              {(["left", "right"] as const).map((dir) => (
+                <button
+                  key={dir}
+                  type="button"
+                  onClick={() => set("direction", dir)}
+                  className={`flex-1 rounded-lg border px-2 py-1.5 text-xs capitalize transition-colors ${
+                    value.direction === dir
+                      ? "border-white bg-white text-black"
+                      : "border-white/20 text-white/70 hover:border-white/40"
+                  }`}
+                >
+                  {dir}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Section title="Depth (applied by distance from centre)" />
+          <Slider id={`${id}-rotation`} label="Max rotation" value={value.rotation} min={0} max={75} step={1} unit="°" onChange={(v) => set("rotation", v)} />
+          <Slider id={`${id}-depth`} label="Max recession (Z)" value={value.depthZ} min={0} max={2} step={0.05} onChange={(v) => set("depthZ", v)} />
+          <Slider id={`${id}-max-scale`} label="Centre scale" value={value.maxScale} min={0.8} max={1.4} step={0.02} onChange={(v) => set("maxScale", v)} />
+          <Slider id={`${id}-min-scale`} label="Min scale" value={value.minScale} min={0.3} max={1} step={0.02} onChange={(v) => set("minScale", v)} />
+          <Slider id={`${id}-min-opacity`} label="Min opacity" value={value.minOpacity} min={0.2} max={1} step={0.02} onChange={(v) => set("minOpacity", v)} />
+          <Slider id={`${id}-falloff`} label="Falloff distance" value={value.falloffCards} min={0.5} max={3} step={0.05} unit=" card-w" onChange={(v) => set("falloffCards", v)} />
 
           <button
             type="button"
@@ -119,7 +136,6 @@ function Slider({
   max,
   step,
   unit = "",
-  disabled = false,
   onChange,
 }: {
   id: string;
@@ -129,7 +145,6 @@ function Slider({
   max: number;
   step: number;
   unit?: string;
-  disabled?: boolean;
   onChange: (value: number) => void;
 }) {
   return (
@@ -148,31 +163,8 @@ function Slider({
         max={max}
         step={step}
         value={value}
-        disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="accent-white disabled:opacity-40"
-      />
-    </label>
-  );
-}
-
-function Toggle({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  return (
-    <label className="flex cursor-pointer items-center justify-between text-xs text-white/80">
-      <span>{label}</span>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        className="h-4 w-4 accent-white"
+        className="accent-white"
       />
     </label>
   );
