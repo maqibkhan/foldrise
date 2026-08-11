@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const PHOTOS = [
+const DEFAULT_PHOTOS = [
   "/images/model-01.webp",
   "/images/model-02.webp",
   "/images/model-04.webp",
@@ -18,6 +18,8 @@ const PHOTOS = [
 const PRELOAD = new Set([3, 4, 5, 6, 7]);
 
 export type SimpleTickerProps = {
+  /** Image URLs to display, in order. Omit to use the built-in default set. */
+  images?: string[];
   /** Height every card renders at, in px. Omit to size it from the viewport. */
   cardHeight?: number;
   /** Multiplies the card size (height, and width via cardAspect) without changing anything else — gap, speed, etc. stay proportional since they're all derived from card height. */
@@ -51,6 +53,7 @@ export type SimpleTickerProps = {
 };
 
 export default function SimpleTicker({
+  images,
   cardHeight,
   scale = 1,
   cardAspect = 0.72,
@@ -67,9 +70,11 @@ export default function SimpleTicker({
   hoverDuration = 300,
   hoverEasing = "ease-out",
 }: SimpleTickerProps) {
+  const photos = images && images.length > 0 ? images : DEFAULT_PHOTOS;
+
   // Two copies of the strip sit back to back; animating the first one exactly
   // out of view (translateX(-50%)) hands off to the second seamlessly.
-  const track = [...PHOTOS, ...PHOTOS];
+  const track = [...photos, ...photos];
 
   const baseHeight = cardHeight ? `${cardHeight}px` : "clamp(200px, 32vh, 420px)";
   const heightVar = scale === 1 ? baseHeight : `calc((${baseHeight}) * ${scale})`;
@@ -107,11 +112,11 @@ export default function SimpleTicker({
         }}
       >
         {track.map((src, i) => {
-          const isFirstCopy = i < PHOTOS.length;
+          const isFirstCopy = i < photos.length;
           const priority = isFirstCopy && PRELOAD.has(i);
           return (
             <div
-              key={`${src}-${isFirstCopy ? "a" : "b"}`}
+              key={`${src}-${i}`}
               className="ticker-card relative shrink-0 overflow-hidden bg-bg-soft"
               style={{
                 height: "var(--card-h)",

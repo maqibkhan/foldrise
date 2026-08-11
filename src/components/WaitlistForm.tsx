@@ -6,7 +6,7 @@ type Status = "idle" | "loading" | "success" | "error";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function WaitlistForm() {
+export default function WaitlistForm({ buttonLabel = "Get early access" }: { buttonLabel?: string }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -110,7 +110,7 @@ export default function WaitlistForm() {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z" />
           </svg>
         )}
-        {status === "loading" ? "Joining..." : "Get early access"}
+        {status === "loading" ? "Joining..." : buttonLabel}
       </button>
 
       {status === "error" && (

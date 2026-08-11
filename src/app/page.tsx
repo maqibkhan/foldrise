@@ -1,8 +1,16 @@
 import SiteHeader from "@/components/SiteHeader";
 import SimpleTicker from "@/components/SimpleTicker";
 import WaitlistForm from "@/components/WaitlistForm";
+import { getSiteContent, listTickerImages } from "@/lib/cms";
 
-export default function Home() {
+// Content and images are managed from /admin (local only) and stored in
+// Supabase, so the page needs a fresh fetch on every request rather than the
+// static prerender it used before the CMS existed.
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [content, tickerImages] = await Promise.all([getSiteContent(), listTickerImages()]);
+
   return (
     /* Everything is measured against the viewport height so the strip always
        lands on screen the way it does in the Figma frame. The design's 1371px
@@ -17,22 +25,17 @@ export default function Home() {
             <div className="flex w-full flex-col items-center gap-8">
               <div className="flex w-full flex-col items-center gap-5">
                 <h1 className="text-title-h1 max-w-[646px] text-[32px] leading-[1.1] text-text-strong sm:text-[44px] lg:text-[56px] lg:leading-[64px]">
-                  Join the waitlist!
+                  {content.headline}
                 </h1>
-                <p className="text-paragraph-md max-w-[492px] text-text-sub">
-                  Foldrise helps clothing brands create premium model photos without the cost and
-                  effort of a traditional photoshoot.
-                </p>
+                <p className="text-paragraph-md max-w-[492px] text-text-sub">{content.body}</p>
               </div>
 
               <div className="w-full max-w-[400px]">
-                <WaitlistForm />
+                <WaitlistForm buttonLabel={content.buttonLabel} />
               </div>
             </div>
 
-            <p className="text-paragraph-sm text-text-soft">
-              We will only email you about the Foldrise launch.
-            </p>
+            <p className="text-paragraph-sm text-text-soft">{content.footerNote}</p>
           </div>
         </section>
 
@@ -41,6 +44,7 @@ export default function Home() {
         {/* 24px at the 1371px reference height = 1.75vh. */}
         <div className="mt-auto pt-[5vh] pb-[1.75vh]">
           <SimpleTicker
+            images={tickerImages.map((img) => img.url)}
             scale={1.15}
             cardAspect={0.72}
             gapRatio={0.05}
