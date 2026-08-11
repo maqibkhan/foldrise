@@ -2,9 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const SOCIALS = [
-  { href: "https://x.com/foldrise", label: "Foldrise on X", icon: "/icons/x.svg" },
+  { href: "https://x.com/foldrise_ai", label: "Foldrise on X", icon: "/icons/x.svg" },
   {
-    href: "https://instagram.com/foldrise",
+    href: "https://www.instagram.com/foldrise.ai/",
     label: "Foldrise on Instagram",
     icon: "/icons/instagram.svg",
   },
