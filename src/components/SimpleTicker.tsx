@@ -20,6 +20,8 @@ const PRELOAD = new Set([3, 4, 5, 6, 7]);
 export type SimpleTickerProps = {
   /** Height every card renders at, in px. Omit to size it from the viewport. */
   cardHeight?: number;
+  /** Multiplies the card size (height, and width via cardAspect) without changing anything else — gap, speed, etc. stay proportional since they're all derived from card height. */
+  scale?: number;
   /** Card width as a fraction of its height — every card uses the same ratio. */
   cardAspect?: number;
   /** Gap between cards, as a fraction of card height. */
@@ -50,6 +52,7 @@ export type SimpleTickerProps = {
 
 export default function SimpleTicker({
   cardHeight,
+  scale = 1,
   cardAspect = 0.72,
   gapRatio = 0.08,
   speed = 45,
@@ -68,7 +71,8 @@ export default function SimpleTicker({
   // out of view (translateX(-50%)) hands off to the second seamlessly.
   const track = [...PHOTOS, ...PHOTOS];
 
-  const heightVar = cardHeight ? `${cardHeight}px` : "clamp(200px, 32vh, 420px)";
+  const baseHeight = cardHeight ? `${cardHeight}px` : "clamp(200px, 32vh, 420px)";
+  const heightVar = scale === 1 ? baseHeight : `calc((${baseHeight}) * ${scale})`;
 
   const fadeMask = fadeEdges
     ? `linear-gradient(to right, transparent, black ${fadeWidth}px, black calc(100% - ${fadeWidth}px), transparent)`

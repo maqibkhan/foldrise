@@ -6,6 +6,7 @@ import SimpleTicker from "@/components/SimpleTicker";
 type Direction = "left" | "right";
 
 type TickerState = {
+  scale: number;
   cardAspect: number;
   gapRatio: number;
   speed: number;
@@ -24,6 +25,7 @@ type TickerState = {
 const EASING_OPTIONS = ["ease-out", "ease-in-out", "ease-in", "linear", "cubic-bezier(0.34, 1.56, 0.64, 1)"];
 
 const DEFAULTS: TickerState = {
+  scale: 1,
   cardAspect: 0.72,
   gapRatio: 0.08,
   speed: 45,
@@ -83,6 +85,7 @@ function TickerControls({
       {open && (
         <div className="flex flex-col gap-4 border-t border-white/10 px-4 py-4 text-sm">
           <Section title="Shape" />
+          <Slider id={`${id}-scale`} label="Card scale" value={value.scale} min={0.4} max={2} step={0.02} onChange={(v) => set("scale", v)} />
           <Slider id={`${id}-aspect`} label="Card aspect (w/h)" value={value.cardAspect} min={0.4} max={1.2} step={0.02} onChange={(v) => set("cardAspect", v)} />
           <Slider id={`${id}-gap`} label="Gap between cards" value={value.gapRatio} min={0} max={0.4} step={0.01} onChange={(v) => set("gapRatio", v)} />
 
