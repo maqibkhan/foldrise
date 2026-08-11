@@ -1,5 +1,5 @@
 import SiteHeader from "@/components/SiteHeader";
-import SimpleTickerPlayground from "@/components/SimpleTickerPlayground";
+import SimpleTicker from "@/components/SimpleTicker";
 import WaitlistForm from "@/components/WaitlistForm";
 
 export default function Home() {
@@ -40,10 +40,21 @@ export default function Home() {
             tall enough; the small padding is only the floor for short laptops. */}
         {/* 24px at the 1371px reference height = 1.75vh. */}
         <div className="mt-auto pt-[5vh] pb-[1.75vh]">
-          {/* In dev this also renders a floating panel (bottom-right) with a
-              live control for every prop below. It's stripped from production
-              builds, so visitors only ever see the ticker itself. */}
-          <SimpleTickerPlayground />
+          <SimpleTicker
+            scale={1.15}
+            cardAspect={0.72}
+            gapRatio={0.05}
+            speed={45}
+            direction="left"
+            pauseOnHover={false}
+            fadeEdges
+            fadeWidth={160}
+            liftOnHover
+            liftScale={1.05}
+            hoverDuration={300}
+            hoverEasing="ease-out"
+            grayscaleUntilHover={false}
+          />
         </div>
       </main>
     </div>
