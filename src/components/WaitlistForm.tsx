@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";
-import SuccessPopover from "@/components/SuccessPopover";
+import { useEffect, useId, useRef, useState } from "react";
+import { Confetti, type ConfettiRef } from "@/components/magicui/confetti";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -11,9 +11,25 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const confettiRef = useRef<ConfettiRef>(null);
   const inputId = useId();
   const messageId = useId();
+
+  useEffect(() => {
+    if (status !== "success") return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    confettiRef.current?.fire({
+      particleCount: 220,
+      spread: 100,
+      startVelocity: 55,
+      gravity: 0.9,
+      ticks: 300,
+      origin: { y: 0.5 },
+      zIndex: 9999,
+    });
+  }, [status]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -43,7 +59,6 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
       }
 
       setStatus("success");
-      setPopoverOpen(true);
       setEmail("");
     } catch {
       setStatus("error");
@@ -54,7 +69,12 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
   if (status === "success") {
     return (
       <>
-        <SuccessPopover open={popoverOpen} onClose={() => setPopoverOpen(false)} />
+        <Confetti
+          ref={confettiRef}
+          manualstart
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[60] h-full w-full"
+        />
         <div
           role="status"
           aria-live="polite"
