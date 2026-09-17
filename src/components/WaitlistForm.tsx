@@ -123,15 +123,18 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
         className="text-label-sm flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-bg-white px-3.5 text-text-darker transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 disabled:cursor-not-allowed disabled:opacity-70"
       >
         {status === "loading" && (
-          <span
-            aria-hidden="true"
-            className="h-4 w-4 shrink-0 animate-spin"
-            style={{
-              background: "conic-gradient(from 90deg, transparent, currentColor)",
-              WebkitMask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-            }}
-          />
+          // "90-ring-with-bg" from svg-spinners (MIT, github.com/n3r4zzurr0/svg-spinners)
+          <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              opacity=".25"
+              d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+            />
+            <path
+              className="animate-spin"
+              style={{ transformOrigin: "center" }}
+              d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+            />
+          </svg>
         )}
         {status === "loading" ? "Joining..." : buttonLabel}
       </button>
