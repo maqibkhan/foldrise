@@ -124,17 +124,15 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
         className="text-label-sm flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-bg-white px-3.5 text-text-darker transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 disabled:cursor-not-allowed disabled:opacity-70"
       >
         {status === "loading" && (
-          <svg aria-hidden="true" className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z" />
-          </svg>
+          <span
+            aria-hidden="true"
+            className="h-4 w-4 shrink-0 animate-spin"
+            style={{
+              background: "conic-gradient(from 90deg, transparent, currentColor)",
+              WebkitMask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
+              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
+            }}
+          />
         )}
         {status === "loading" ? "Joining..." : buttonLabel}
       </button>
