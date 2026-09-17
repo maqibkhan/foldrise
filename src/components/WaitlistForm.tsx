@@ -72,6 +72,7 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
         <Confetti
           ref={confettiRef}
           manualstart
+          globalOptions={{ resize: true, useWorker: false }}
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-[60] h-full w-full"
         />
