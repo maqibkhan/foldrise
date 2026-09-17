@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import SuccessPopover from "@/components/SuccessPopover";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -10,6 +11,7 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [popoverOpen, setPopoverOpen] = useState(false);
   const inputId = useId();
   const messageId = useId();
 
@@ -41,6 +43,7 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
       }
 
       setStatus("success");
+      setPopoverOpen(true);
       setEmail("");
     } catch {
       setStatus("error");
@@ -50,21 +53,24 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
 
   if (status === "success") {
     return (
-      <div
-        role="status"
-        aria-live="polite"
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-border-strong bg-white/5 px-4 text-label-sm"
-      >
-        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-4 w-4 shrink-0">
-          <path
-            d="M16.7 5.2 8.7 15.7a.75.75 0 0 1-1.13.07l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.9 3.89 7.48-9.82a.75.75 0 0 1 1.19.92Z"
-            fill="currentColor"
-          />
-        </svg>
-        <span className="text-label-sm text-text-strong">
-          You&apos;re on the list — we&apos;ll email you at launch.
-        </span>
-      </div>
+      <>
+        <SuccessPopover open={popoverOpen} onClose={() => setPopoverOpen(false)} />
+        <div
+          role="status"
+          aria-live="polite"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-border-strong bg-white/5 px-4 text-label-sm"
+        >
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-4 w-4 shrink-0">
+            <path
+              d="M16.7 5.2 8.7 15.7a.75.75 0 0 1-1.13.07l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.9 3.89 7.48-9.82a.75.75 0 0 1 1.19.92Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span className="text-label-sm text-text-strong">
+            You&apos;re on the list — we&apos;ll email you at launch.
+          </span>
+        </div>
+      </>
     );
   }
 
