@@ -17,8 +17,6 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
 
   useEffect(() => {
     if (status !== "success") return;
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
 
     confettiRef.current?.fire({
       particleCount: 220,
