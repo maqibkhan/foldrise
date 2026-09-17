@@ -81,11 +81,11 @@ export default function SimpleTicker({
 
   const fadeMask = fadeEdges
     ? `linear-gradient(to right, transparent, black ${fadeWidth}px, black calc(100% - ${fadeWidth}px), transparent)`
-    : undefined;
+    : "none";
 
   return (
     <div
-      className="group/ticker relative flex w-full overflow-hidden"
+      className="ticker-strip group/ticker relative flex w-full overflow-hidden"
       style={
         {
           "--card-h": heightVar,
@@ -93,7 +93,7 @@ export default function SimpleTicker({
           "--hover-duration": `${hoverDuration}ms`,
           "--hover-ease": hoverEasing,
           "--ticker-grayscale": grayscaleUntilHover ? grayscaleAmount : 0,
-          ...(fadeMask ? { maskImage: fadeMask, WebkitMaskImage: fadeMask } : {}),
+          "--ticker-fade-mask": fadeMask,
         } as React.CSSProperties
       }
       role="img"

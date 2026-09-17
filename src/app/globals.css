@@ -199,6 +199,22 @@ body {
   filter: grayscale(0);
 }
 
+/* Edge fade mask: driven by a CSS custom property (same reasoning as above)
+   so it can be turned off responsively below — a Tailwind arbitrary-value
+   mask class built from a runtime template string wouldn't have real CSS to
+   override at the mobile breakpoint. */
+.ticker-strip {
+  -webkit-mask-image: var(--ticker-fade-mask, none);
+  mask-image: var(--ticker-fade-mask, none);
+}
+
+@media (max-width: 640px) {
+  .ticker-strip {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
 /* The photo strip animates only when the visitor is happy to see motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
