@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { Confetti, type ConfettiRef } from "@/components/magicui/confetti";
+import { useId, useState } from "react";
+import { Confetti } from "@/components/magicui/confetti";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -11,23 +11,8 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const confettiRef = useRef<ConfettiRef>(null);
   const inputId = useId();
   const messageId = useId();
-
-  useEffect(() => {
-    if (status !== "success") return;
-
-    confettiRef.current?.fire({
-      particleCount: 220,
-      spread: 100,
-      startVelocity: 55,
-      gravity: 0.9,
-      ticks: 300,
-      origin: { y: 0.5 },
-      zIndex: 9999,
-    });
-  }, [status]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,8 +53,15 @@ export default function WaitlistForm({ buttonLabel = "Get early access" }: { but
     return (
       <>
         <Confetti
-          ref={confettiRef}
-          manualstart
+          options={{
+            particleCount: 220,
+            spread: 100,
+            startVelocity: 55,
+            gravity: 0.9,
+            ticks: 300,
+            origin: { y: 0.5 },
+            zIndex: 9999,
+          }}
           globalOptions={{ resize: true, useWorker: false }}
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-[60] h-full w-full"
